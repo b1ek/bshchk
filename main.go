@@ -29,7 +29,7 @@ func main() {
 	}
 
 	var file []byte
-	if args.File != "" {
+	if (args.File != "") && (args.File != "-") {
 		f, err := os.ReadFile(args.File)
 		if err != nil {
 			if os.IsNotExist(err) {
