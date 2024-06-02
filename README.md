@@ -8,6 +8,19 @@ bshchk '' with_bshchk.sh # will read from stdin
 bshchk # will read from stdin, and write to stdin
 ```
 
+tags
+```sh
+# To explicitly add curl:
+#bshchk:add-cmd curl
+
+# To disable checking for one curl:
+#bshchk:ignore-cmd curl
+
+# You can add/ignore multiple commands at once:
+#bshchk:add-cmd curl wget
+```
+
+
 ## license
 ```
 bshchk - a bash runtime dependency checker

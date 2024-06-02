@@ -6,6 +6,26 @@ import (
 	"mvdan.cc/sh/v3/syntax"
 )
 
+func get_ignored_and_deps(code string) ([]string, []string) {
+	var ignored []string = []string{"alias", "bind", "builtin", "caller", "command", "declare", "echo", "enable", "let", "local", "logout", "mapfile", "printf", "read", "readarray", "source", "type", "typeset", "ulimit", "unalias"}
+	var deps []string
+
+	for _, line := range strings.Split(code, "\n") {
+		splitted := strings.Split(line, " ")
+		if len(splitted) < 2 {
+			continue
+		}
+		if splitted[0] == "#bshchk:ignore-cmd" {
+			ignored = append(ignored, splitted[1:]...)
+		}
+		if splitted[0] == "#bshchk:add-cmd" {
+			deps = append(deps, splitted[1:]...)
+		}
+	}
+
+	return ignored, deps
+}
+
 func find(code string) ([]string, error) {
 	r := strings.NewReader(code)
 	f, err := syntax.NewParser().Parse(r, "")
@@ -13,8 +33,7 @@ func find(code string) ([]string, error) {
 		return make([]string, 0), err
 	}
 
-	var builtins = [...]string{"alias", "bind", "builtin", "caller", "command", "declare", "echo", "enable", "help", "let", "local", "logout", "mapfile", "printf", "read", "readarray", "source", "type", "typeset", "ulimit", "unalias"}
-	var deps []string
+	ignored, deps := get_ignored_and_deps(code)
 	syntax.Walk(f, func(node syntax.Node) bool {
 		switch x := node.(type) {
 		case *syntax.CallExpr:
@@ -36,7 +55,7 @@ func find(code string) ([]string, error) {
 
 	for _, dep := range deps {
 		is_builtin := false
-		for _, builtin := range builtins {
+		for _, builtin := range ignored {
 			if dep == builtin {
 				is_builtin = true
 			}
