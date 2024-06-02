@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -40,14 +40,13 @@ func main() {
 		}
 		file = f
 	} else {
-		scanner := bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			file = scanner.Bytes()
-		}
+		data, err := io.ReadAll(os.Stdin)
 
-		if scanner.Err() != nil {
-			panic(scanner.Err())
+		if err != nil {
+			fmt.Printf("Coudln't read from stdin: %s", err.Error())
+			os.Exit(1)
 		}
+		file = data
 	}
 
 	code := string(file)
@@ -70,7 +69,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	gen := shebang + "\n\n" + gencode(found) + "\n" + strings.Join(codelines[1:], "\n")
+	gen := shebang + "\n\n" + gencode(found) + "\n\n" + strings.Join(codelines[1:], "\n")
 
 	if args.Outfile == "" {
 		fmt.Printf("%s", gen)
