@@ -1,5 +1,4 @@
-# This is the runtime dependency checker
-# Please do not remove the following lines.
+# bshchk (https://git.blek.codes/blek/bshchk)
 {{.DepsVar}}=({{.Deps}})
 non_ok=()
 
