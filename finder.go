@@ -34,6 +34,18 @@ func find(code string) ([]string, error) {
 	}
 
 	ignored, deps := get_ignored_and_deps(code)
+
+	// 1. find function declarations
+	syntax.Walk(f, func(node syntax.Node) bool {
+		switch x := node.(type) {
+		case *syntax.FuncDecl:
+			ignored = append(ignored, x.Name.Value)
+		}
+
+		return true
+	})
+
+	// 2. collect all commands
 	syntax.Walk(f, func(node syntax.Node) bool {
 		switch x := node.(type) {
 		case *syntax.CallExpr:
