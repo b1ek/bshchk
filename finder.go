@@ -7,6 +7,7 @@ import (
 )
 
 func get_ignored_and_deps(code string) ([]string, []string) {
+	// source: https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html
 	var ignored []string = []string{"alias", "bind", "builtin", "caller", "command", "declare", "echo", "enable", "let", "local", "logout", "mapfile", "printf", "read", "readarray", "source", "type", "typeset", "ulimit", "unalias"}
 	var deps []string
 
