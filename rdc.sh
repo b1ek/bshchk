@@ -17,6 +17,7 @@ if (( ${#non_ok[@]} != 0 )); then
     >&2 echo "  From which, these are missing:"
     >&2 echo "  > $non_ok"
     >&2 echo "Make sure that those are installed and are present in \$PATH."
+    exit 1
 fi
 
 unset non_ok{{if .UnsetDeps}}
