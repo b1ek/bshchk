@@ -18,6 +18,10 @@ type Template struct {
 
 func gencode(deps []string) string {
 
+	if len(deps) == 0 {
+		return ""
+	}
+
 	rdc := Template{args.DepsVarName, "'" + strings.Join(deps, "' '") + "'", !args.ExposeDeps}
 	tmpl, err := template.New("").Parse(bin)
 	if err != nil {
